@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=golang
+      - POSTGRES_PASSWORD=golang
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+
+volumes:
+  db_postgres:
+    external: true
